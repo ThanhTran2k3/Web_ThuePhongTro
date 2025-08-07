@@ -1,5 +1,7 @@
 package webthuetro.user_service.client;
 
+
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
@@ -17,10 +19,11 @@ import java.io.IOException;
 public class FileClient {
 
     private final WebClient webClient;
+    private Environment env;
 
-    public FileClient(WebClient.Builder builder) {
-        String userApi = "http://localhost:8083/api/image";
-        this.webClient = builder.baseUrl(userApi).build();
+    public FileClient(WebClient.Builder builder, Environment env) {
+        String userApi = env.getProperty("HOST_NAME");
+        this.webClient = builder.baseUrl(userApi+"/api/image").build();
     }
 
     public FileClientResponse upload(MultipartFile multipartFile) throws IOException {

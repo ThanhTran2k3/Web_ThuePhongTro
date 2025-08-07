@@ -1,8 +1,10 @@
 package webthuetro.user_service.configuration;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,11 +21,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
-    @Value("${JWT_SECRET}")
-    private String secretKey;
-
+    private Environment env;
 
     private static final String[] PUBLIC_POST_URLS = {"/api/user/create"};
 
@@ -44,7 +45,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-
+        String secretKey = env.getProperty("JWT_SECRET");
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "HS256");
         return NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)

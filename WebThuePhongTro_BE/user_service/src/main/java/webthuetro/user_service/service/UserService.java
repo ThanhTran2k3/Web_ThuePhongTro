@@ -64,7 +64,10 @@ public class UserService {
 
     public ResponseEntity<ApiResponse<String>> create(UserCreateRequest request) {
 
-        User user = userMapper.toUser(request);
+        User user = new User();
+        user.setUserName(request.getUserName());
+        if(request.getAvatar() != null)
+            user.setAvatar(request.getAvatar());
         userRepository.save(user);
         return ResponseEntity.ok(
                 ApiResponse.<String>builder()

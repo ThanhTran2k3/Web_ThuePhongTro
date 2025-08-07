@@ -1,26 +1,26 @@
 package webthuetro.file_service.config;
 
 import com.cloudinary.Cloudinary;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@AllArgsConstructor
 public class CloudinaryConfig {
 
-    @Value("${CLOUD_NAME}")
-    private String cloudName;
+    private Environment env;
 
-    @Value("${CLOUD_API_KEY}")
-    private String apiKey;
-
-    @Value("${CLOUD_API_SECRET}")
-    private String secretKey;
     @Bean
     public Cloudinary cloudinary() {
+        String cloudName = env.getProperty("CLOUD_NAME");
+        String apiKey = env.getProperty("CLOUD_API_KEY");
+        String secretKey = env.getProperty("CLOUD_API_SECRET");
         Map<String, String> config = new HashMap<>();
         config.put("cloud_name", cloudName);
         config.put("api_key", apiKey);

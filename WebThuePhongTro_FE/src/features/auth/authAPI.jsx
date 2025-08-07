@@ -1,8 +1,18 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-const authAPI = 'http://localhost:8080/api';
+import { loadConfig } from '../../config';
+
+let authAPI = "";
+
+export const setupAPI = async () => {
+  const cfg = await loadConfig();
+  authAPI = `${cfg.API_URL}/api`;
+};
+
 
 export const loginAPI = async (loginData) => {
+    if (!authAPI) await setupAPI(); 
+     
     try {
         const response = await axios.post(`${authAPI}/auth/login`, loginData, {
             headers: {
@@ -30,6 +40,7 @@ export const loginAPI = async (loginData) => {
 
 
 export const registerAPI = async (registerData) => {
+    if (!authAPI) await setupAPI(); 
     try {
         await axios.post(`${authAPI}/auth/register`, registerData, {
             headers: {

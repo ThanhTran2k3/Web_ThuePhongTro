@@ -1,8 +1,17 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-const userAPI = 'http://localhost:8080/api';
+import { loadConfig } from '../../config';
+
+
+let userAPI 
+export const setupAPI = async () => {
+  const cfg = await loadConfig();
+  userAPI = `${cfg.API_URL}/api`;
+};
 
 export const meAPI = async (token) => {
+    if (!userAPI) await setupAPI();
+
     try {
         const response = await axios.get(`${userAPI}/user/me`, {
             headers: {
@@ -22,6 +31,7 @@ export const meAPI = async (token) => {
 };
 
 export const editUserAPI = async (token, editData) => {
+    if (!userAPI) await setupAPI();
     try {
         const response = await axios.put(`${userAPI}/user/edit`, editData, {
             headers: {
